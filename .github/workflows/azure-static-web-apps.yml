@@ -3,6 +3,7 @@ name: Deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches: [main]
