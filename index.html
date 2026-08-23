@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0A0B0D" />
+
+    <title>Purpose Apps — Building apps that give people purpose</title>
+    <meta
+      name="description"
+      content="Purpose Apps builds software that puts income and structure back in people's hands as automation removes traditional work. Home of Provoco."
+    />
+    <link rel="canonical" href="https://purpose-apps.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://purpose-apps.com/" />
+    <meta property="og:title" content="Purpose Apps — Building apps that give people purpose" />
+    <meta
+      property="og:description"
+      content="Software that puts income and structure back in people's hands as automation removes traditional work. Home of Provoco."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <script>
+      // Set the theme before first paint so there is no flash of the wrong palette.
+      (function () {
+        try {
+          var s = localStorage.getItem('pa-theme')
+          var t = s === 'light' || s === 'dark'
+            ? s
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          document.documentElement.dataset.theme = t
+          document.querySelector('meta[name="theme-color"]')
+            .setAttribute('content', t === 'dark' ? '#0a0b0d' : '#faf9f7')
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
