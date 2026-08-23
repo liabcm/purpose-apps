@@ -84,9 +84,42 @@ there is no flash of the wrong palette.
 | | |
 | --- | --- |
 | Azure resource group | `purpose-apps` (East US 2) |
-| Static Web App | `purpose-apps` — Free tier, $0/month |
+| Static Web App | `purpose-apps` — **Free** tier, $0/month |
 | Default hostname | `proud-cliff-0b30da30f.7.azurestaticapps.net` |
-| Custom domain | `purpose-apps.com` (DNS on Cloudflare) |
+| Live site | `www.purpose-apps.com` |
+| DNS | Cloudflare |
 
-`npm run deploy` pulls the deployment token from Azure via the CLI, so there is no
-secret stored in this repo.
+It is a Static Web App, not an App Service — same idea, but free rather than about
+$13/month, with custom domains and managed TLS included.
+
+### Deploying
+
+Pushing to `main` deploys automatically via
+[.github/workflows/azure-static-web-apps.yml](.github/workflows/azure-static-web-apps.yml).
+The workflow runs `npm run build`, which type-checks first, so a TypeScript error
+fails the deploy instead of shipping. Pull requests get their own preview
+environment, torn down when the PR closes. It can also be triggered by hand from the
+Actions tab.
+
+The Azure deployment token lives in the repo secret `AZURE_STATIC_WEB_APPS_API_TOKEN`.
+To rotate it:
+
+```bash
+az staticwebapp secrets list --name purpose-apps --resource-group purpose-apps \
+  --query 'properties.apiKey' -o tsv | gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN
+```
+
+`npm run deploy` still works for pushing a build straight from your machine, bypassing
+CI. It reads the token from Azure via your `az login`, so no secret is stored locally.
+
+### DNS
+
+| Type | Name | Content | Proxy |
+| --- | --- | --- | --- |
+| TXT | `_dnsauth` | Azure apex validation token | — |
+| CNAME | `@` | `proud-cliff-0b30da30f.7.azurestaticapps.net` | **DNS only** |
+| CNAME | `www` | `proud-cliff-0b30da30f.7.azurestaticapps.net` | **DNS only** |
+
+Both CNAMEs must stay unproxied (grey cloud). Turning Cloudflare's orange proxy on
+puts Cloudflare in front of Azure, which breaks domain validation and the managed
+certificate.
